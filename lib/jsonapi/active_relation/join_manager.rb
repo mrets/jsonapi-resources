@@ -74,9 +74,11 @@ module JSONAPI
         init_join_sources = records.arel.join_sources
         init_join_sources_length = init_join_sources.length
 
-        records = yield(records, options)
+        # Changing this so we can work with `merge` working differently in rails6.
+        # records = yield(records, options)
+        # join_sources = records.arel.join_sources
+        join_sources = yield(records, options)
 
-        join_sources = records.arel.join_sources
         if join_sources.length > init_join_sources_length
           last_join = (join_sources - init_join_sources).last
         else
@@ -86,7 +88,7 @@ module JSONAPI
           # :nocov:
         end
 
-        return records, last_join
+        return records.joins(last_join), last_join
       end
 
       def self.alias_from_arel_node(node)

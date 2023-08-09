@@ -349,7 +349,8 @@ module JSONAPI
                                                     join_type: join_type,
                                                     resource_type: resource_type,
                                                     options: options)
-        records.merge(relationship_records)
+        # records.merge(relationship_records)
+        records.arel.join_sources + relationship_records.arel.join_sources
       end
 
       protected
